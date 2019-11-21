@@ -1,0 +1,24 @@
+{
+    "db": {
+        "database": "test_db",
+        "host": "mongodb://127.0.0.1:27017/test_db"
+    },
+    "auth": {
+        "secret": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+        "tokenPeriod": "1440h"
+    },
+    "webServer": {
+        "url": "http://demo.com",
+        "adminEmail": "admin@demo.com",
+        "baseUrl": "http://demo.com",
+        "port": "3000"
+    },
+    "logger": {
+        "console": {
+            "level": "silly",
+            "handleExceptions": true,
+            "json": false,
+            "colorize": true
+        }
+    }
+}
