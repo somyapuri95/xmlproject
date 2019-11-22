@@ -3,49 +3,11 @@
 
 const axios = require('axios');
 const parser = require('fast-xml-parser');
-const j2x = require('fast-xml-parser').j2xParser;
+// const j2x = require('fast-xml-parser').j2xParser;
 const updationScheme = require('../helpers/updateEntities');
 
-let XML_URL =
-  'https://www.sauerlandmakelaar.nl/xml.php?qs=huisenaanbod';
 
-exports.kyeroFormat = async (req, res) => {
-
-    try {
-    // Get Data from the url using axios
-        let xmlRes = await axios.get(XML_URL);
-        let xmlData = xmlRes.data;
-        // Convert Data to JSON
-        if (parser.validate(xmlData) === true) {
-            let xmlJson = parser.parse(xmlData);
-            // let property = xmlJson.root.property;
-
-            return res.data(xmlJson);
-        }
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-exports.xmlFormat = async (req, res) => {
-
-    try {
-    // Get Data from the url using axios
-        let xmlRes = await axios.get(XML_URL);
-        let xmlData = xmlRes.data;
-        // Convert Data to JSON
-        if (parser.validate(xmlData) === true) {
-            let xmlJson = parser.parse(xmlData);
-            var parsera = new j2x();
-            var xml = parsera.parse(xmlJson);
-            return res.data(xml);
-        }
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-exports.createKyreoFormat = async (req, res) => {
+exports.store = async (req, res) => {
     let model = req.body;
     try {
     // Get Data from the url using axios
@@ -66,9 +28,7 @@ exports.createKyreoFormat = async (req, res) => {
     }
 };
 
-
-
-exports.getKyreoFormat = async (req, res) => {
+exports.readOne = async (req, res) => {
     try {
         let xmltojson = await db.xml.findById(req.params.id);
         return res.data(xmltojson);
@@ -80,21 +40,37 @@ exports.getKyreoFormat = async (req, res) => {
 };
 
 
-exports.updateKyreoFormat = async (req, res) => {
-    let model = req.body;
+exports.updateValue = async (req, res) => {
+    // let model = req.body;
     try {
         let xmltojson = await db.xml.findById(req.params.id);
         let url = xmltojson.url;
         let xml = JSON.parse(url);
-        let product = [];
-        for (var y = 0; y < xml.root.property.length; y++) {
-            let prijs = xml.root.property[y];
-            product = prijs;
-                
-        }
-        product = updationScheme.update(model, product);
-        // product = await product.save();
-        return res.data(product);
+        let properties = xml.root.property;
+        let upadtedProps = properties.map(property => {
+            // if(property.id == req.body.id){
+            property.title = req.body.title;
+            // }
+            return property;
+        });
+        xml.root.property = upadtedProps;
+        xmltojson.url = JSON.stringify(xml);
+        xmltojson = await xmltojson.save();
+        return res.data(upadtedProps);
+
+        /*
+         * /*
+         * for (var y = 0; y < xml.root.property.length; y++) {
+         *     let id = xml.root.property[y].id;
+         *     let title = xml.root.property[y].title;
+         *     product[y] = {id,title};
+         * }
+         * let found = product.find(obj => obj.id == req.body.id);
+         * found = updationScheme.update(model, found);
+         * found = await db.xml.save();
+         */
+        // return res.data('found');
+        
     } catch (e) {
         return res.failure(e);
     }
@@ -102,7 +78,7 @@ exports.updateKyreoFormat = async (req, res) => {
 };
 
 
-exports.updateKyreoColumn = async (req, res) => {
+exports.updateColumn = async (req, res) => {
     let model = req.body;
     try {
         let xmltojson = await db.xml.findById(req.params.id);
@@ -124,7 +100,7 @@ exports.updateKyreoColumn = async (req, res) => {
 
 };
 
-exports.allkyeroformEntries = async(req, res) => {
+exports.read = async(req, res) => {
 
     try {
         let xmltojson = await db.xml.find();
@@ -142,6 +118,28 @@ exports.allkyeroformEntries = async(req, res) => {
        
       
 
+    } catch (e) {
+        return res.failure(e);
+    }
+
+};
+
+exports.allreadValue = async (req, res) => {
+    try {
+        let xmltojson = await db.xml.find();
+        for (var i = 0; i < xmltojson.length; i++) {
+            let url = xmltojson[i].url;
+            let xml = JSON.parse(url);
+            let product = [];
+            for (var y = 0; y < xml.root.property.length; y++) {
+                product[y] = xml.root.property[y];
+                
+                
+            }
+            return res.page(product);
+        }
+       
+        
     } catch (e) {
         return res.failure(e);
     }

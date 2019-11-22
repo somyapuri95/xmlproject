@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 'use strict';
 // set json reponse this file
 const mapper = require('../mappers/user');
@@ -30,11 +31,13 @@ exports.signin = async(req, res) => {
     try {
         // Require db find username
         let user = await db.user.findOne({ 'username' : username });
-        // if user not found username get error
-        if (!user) {
-            throw 'User Not Found';
-        }
-        // used userService for compare hash password
+        /*
+         * if user not found username get error
+         * if (!user) {
+         *     throw 'User Not Found';
+         * }
+         * used userService for compare hash password
+         */
         var isPasswordMatch = await userService.comparePassword(password, user.password);
         // if matched password require body password get response otherwise error
         if (isPasswordMatch) {
@@ -61,7 +64,7 @@ exports.signUp = async (req, res) => {
     let username = req.body.username;
     try {
         // Require db find username
-        let user = await db.user.findOne({ 'username' : username });
+        let user = await db.user.find();
         // if user not found username get error
         if (!user) {
             throw 'User Not Found';

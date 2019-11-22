@@ -34,29 +34,25 @@ module.exports.configure = (app) => {
 
     api.model('xmls')
         .register([{
-            action: 'GET',          // view all json xml
-            method: 'xmlFormat',
-            url: '/kyero/format',
-        },{
-            action: 'GET',          // view all json xml
-            method: 'kyeroFormat',
-            url: '/kyero'
-        },{
             action: 'POST',       // store json response
-            method: 'createKyreoFormat',
-            // filter: auth.requiresToken
+            method: 'store'
         },{
             action: 'GET',          // view all json xml
-            method: 'allkyeroformEntries',
+            method: 'read',
            
+        },
+        {
+            action: 'GET',          // view all json xml
+            method: 'allreadValue',
+            url: '/values'
         },{
             action: 'PUT',
-            method: 'updateKyreoFormat', // update api
-            url: '/:id'
+            method: 'updateValue', // update api
+            url: '/values/:id'
         }, {
             action: 'GET',  // read on xmltojson api
-            method: 'getKyreoFormat',
-            url: '/:id'
+            method: 'readOne',
+            url: '/values/:id'
         }]);
 
 
