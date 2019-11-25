@@ -30,11 +30,14 @@ exports.signin = async(req, res) => {
     try {
         // Require db find username
         let user = await db.user.findOne({ 'username' : username });
+        if (!user) {
+            throw 'User Not Found';
+        }else{
+            return res.data(mapper.toAuthModel(user));
+        }
         /*
          * if user not found username get error
-         * if (!user) {
-         *     throw 'User Not Found';
-         * }
+         *
          * used userService for compare hash password
          */
         /*
@@ -42,7 +45,7 @@ exports.signin = async(req, res) => {
          * if matched password require body password get response otherwise error
          *  if (isPasswordMatch) {
          */
-        return res.data(mapper.toAuthModel(user));
+      
         /*
          * not matched response show error
          * } else {
