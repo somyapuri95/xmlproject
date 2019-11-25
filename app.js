@@ -41,7 +41,7 @@ logger.info('environment: ' + process.env.NODE_ENV);
 
 logger.info('starting server');
 // connecting port
-server.listen(process.env.PORT || config.port, function () {
+server.listen(config.port, function () {
     logger.info('listening on port:' + config.port);
     console.log('listening on port:' + config.port);
 });

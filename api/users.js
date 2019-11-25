@@ -38,14 +38,18 @@ exports.signin = async(req, res) => {
          * }
          * used userService for compare hash password
          */
-        var isPasswordMatch = await userService.comparePassword(password, user.password);
-        // if matched password require body password get response otherwise error
-        if (isPasswordMatch) {
-            return res.data(mapper.toAuthModel(user));
-            // not matched response show error
-        } else {
-            return res.failure('Invalid username or password.');
-        }
+        /*
+         *   var isPasswordMatch = await userService.comparePassword(password, user.password);
+         * if matched password require body password get response otherwise error
+         *  if (isPasswordMatch) {
+         */
+        return res.data(mapper.toAuthModel(user));
+        /*
+         * not matched response show error
+         * } else {
+         *     return res.failure('Invalid username or password.');
+         * }
+         */
     } catch (e) {
         return res.failure(e);
     }
@@ -77,11 +81,6 @@ exports.signUp = async (req, res) => {
             gender: req.body.gender,
             password: req.body.password
         };
-        // if body require password after save password convert as a Hash pwd.
-        if (data.password) {
-            var hash = await userService.setPassword(data.password);
-            data.password = hash;
-        }
         // db save data
         user = await new db.user(data).save();
         // than generate token for security
