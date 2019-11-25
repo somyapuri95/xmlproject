@@ -6,8 +6,7 @@ const mapper = require('../mappers/user');
 const auth = require('../middlewares/authorization');
 // value update schema
 const updationScheme = require('../helpers/updateEntities');
-// userservice used password convert as hash for privacy
-const userService = require('../services/user');
+
 
 /**
  * user account login api
