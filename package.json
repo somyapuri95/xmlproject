@@ -11,7 +11,7 @@
     "array.filter": "^0.1.6",
     "arraylist": "^0.1.0",
     "aws-s3": "^1.5.5",
-    "aws-sdk": "^2.297.0",
+    "aws-sdk": "^2.814.0",
     "body-parser": "^1.18.3",
     "braintree": "^2.17.0",
     "busboy-body-parser": "^0.3.2",
